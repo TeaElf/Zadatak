@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import zadatak.domain.Predmet;
+import zadatak.domain.dto.PredmetRequestDto;
+import zadatak.domain.dto.PredmetResponseDto;
 import zadatak.service.PredmetService;
 
 @RestController
@@ -26,28 +28,28 @@ public class PredmetApi {
 	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Predmet save (@RequestBody Predmet predmet) {
-		return null;
+	public @ResponseBody PredmetResponseDto save (@RequestBody PredmetRequestDto predmet) {
+		return predmetService.save(predmet);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Predmet update (@RequestBody Predmet predmet) {
-		return null;
+	public @ResponseBody PredmetResponseDto update (@RequestBody PredmetRequestDto predmet) {
+		return predmetService.update(predmet);
 	}
 	
 	@RequestMapping(value = "/findById", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Predmet findById (@RequestParam Long id) {
-		return null;
+	public @ResponseBody PredmetResponseDto findById (@RequestParam Long id) {
+		return predmetService.findById(id);
 	}
 	
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Predmet> findAll () {
-		return null;
+	public @ResponseBody List<PredmetResponseDto> findAll () {
+		return predmetService.findAll();
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Boolean delete(@RequestParam Long id) {
-		return null;
+		return predmetService.delete(id);
 	}
 
 }

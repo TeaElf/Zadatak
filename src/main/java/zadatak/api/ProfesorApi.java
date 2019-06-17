@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import zadatak.domain.Profesor;
+import zadatak.domain.dto.ProfesorRequestDto;
+import zadatak.domain.dto.ProfesorResponseDto;
 import zadatak.service.ProfesorService;
 
 @RestController
@@ -26,27 +28,27 @@ public class ProfesorApi {
 	}
 	
 	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Profesor save (@RequestBody Profesor profesor) {
-		return null;
+	public @ResponseBody ProfesorResponseDto save (@RequestBody ProfesorRequestDto profesor) {
+		return profesorService.save(profesor);
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Profesor update (@RequestBody Profesor profesor) {
-		return null;
+	public @ResponseBody ProfesorResponseDto update (@RequestBody ProfesorRequestDto profesor) {
+		return profesorService.update(profesor);
 	}
 
 	@RequestMapping(value = "/findById", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody Profesor findById (@RequestParam Long id) {
-		return null;
+	public @ResponseBody ProfesorResponseDto findById (@RequestParam Long id) {
+		return profesorService.findById(id);
 	}
 	
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Profesor> findAll () {
-		return null;
+	public @ResponseBody List<ProfesorResponseDto> findAll () {
+		return profesorService.findAll();
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody Boolean delete(@RequestParam Long id) {
-		return null;
+		return profesorService.delete(id);
 	}
 }
