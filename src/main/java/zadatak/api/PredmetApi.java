@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import zadatak.domain.Predmet;
 import zadatak.domain.dto.PredmetRequestDto;
 import zadatak.domain.dto.PredmetResponseDto;
 import zadatak.service.PredmetService;

@@ -1,5 +1,5 @@
 package zadatak.domain.dto;
-;
+
 
 public class PredmetRequestDto {
 

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import zadatak.domain.Profesor;
 import zadatak.domain.dto.ProfesorRequestDto;
 import zadatak.domain.dto.ProfesorResponseDto;
 import zadatak.service.ProfesorService;

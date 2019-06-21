@@ -50,8 +50,10 @@ public class PredmetServiceImpl implements PredmetService {
 	public PredmetResponseDto findById(Long id) {
 		Optional<Predmet> optPredmet = predmetDao.findById(id);
 		Predmet predmet = null;
-		if(optPredmet.isPresent())
-			predmet = optPredmet.get();
+		if(!optPredmet.isPresent()) {
+			//TODO Exception
+		}
+		predmet = optPredmet.get();
 		PredmetResponseDto response = new PredmetResponseDto(predmet);
 		return response;
 	}
