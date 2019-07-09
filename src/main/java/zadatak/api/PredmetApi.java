@@ -3,6 +3,7 @@ package zadatak.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.querydsl.core.types.Predicate;
+
+import zadatak.dao.PredmetDao;
+import zadatak.domain.Predmet;
 import zadatak.domain.dto.PredmetRequestDto;
 import zadatak.domain.dto.PredmetResponseDto;
 import zadatak.service.PredmetService;
@@ -42,8 +47,8 @@ public class PredmetApi {
 	}
 	
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<PredmetResponseDto> findAll () {
-		return predmetService.findAll();
+	public @ResponseBody List<PredmetResponseDto> findAll (@QuerydslPredicate(root = Predmet.class, bindings = PredmetDao.class) Predicate predicate) {
+		return predmetService.findAll(predicate);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

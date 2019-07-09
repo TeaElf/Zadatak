@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.types.Predicate;
+
 import zadatak.dao.ProfesorDao;
 import zadatak.domain.Profesor;
 import zadatak.domain.dto.ProfesorRequestDto;
@@ -58,8 +60,8 @@ public class ProfesorServiceImpl implements ProfesorService {
 	}
 
 	@Override
-	public List<ProfesorResponseDto> findAll() {
-		List<Profesor> profesors = profesorDao.findAll();
+	public List<ProfesorResponseDto> findAll(Predicate predicate) {
+		List<Profesor> profesors = profesorDao.findAll(predicate);
 		List<ProfesorResponseDto> response = new ArrayList<ProfesorResponseDto>();
 		profesors.forEach(profesor -> response.add(new ProfesorResponseDto(profesor)));
 		return response;

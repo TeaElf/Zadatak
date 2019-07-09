@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.types.Predicate;
+
 import zadatak.dao.PredmetDao;
 import zadatak.domain.Predmet;
 import zadatak.domain.dto.PredmetRequestDto;
@@ -59,7 +61,7 @@ public class PredmetServiceImpl implements PredmetService {
 	}
 
 	@Override
-	public List<PredmetResponseDto> findAll() {
+	public List<PredmetResponseDto> findAll(Predicate predicate) {
 		List<Predmet> predmeti = predmetDao.findAll();
 		List<PredmetResponseDto> responses = new ArrayList<PredmetResponseDto>();
 		for(Predmet predmet: predmeti) {
