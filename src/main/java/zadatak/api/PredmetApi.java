@@ -1,9 +1,10 @@
 package zadatak.api;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,8 +48,8 @@ public class PredmetApi {
 	}
 	
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<PredmetResponseDto> findAll (@QuerydslPredicate(root = Predmet.class, bindings = PredmetDao.class) Predicate predicate) {
-		return predmetService.findAll(predicate);
+	public @ResponseBody Page<PredmetResponseDto> findAll (@QuerydslPredicate(root = Predmet.class, bindings = PredmetDao.class) Predicate predicate, @PageableDefault(value = 20, page = 0) Pageable pageable) {
+		return predmetService.findAll(predicate, pageable);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)

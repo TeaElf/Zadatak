@@ -1,10 +1,12 @@
 package zadatak.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
@@ -13,6 +15,7 @@ import zadatak.dao.ProfesorDao;
 import zadatak.domain.Profesor;
 import zadatak.domain.dto.ProfesorRequestDto;
 import zadatak.domain.dto.ProfesorResponseDto;
+import zadatak.exceptions.ResourceNotFoundException;
 import zadatak.service.ProfesorService;
 
 @Service
@@ -38,7 +41,7 @@ public class ProfesorServiceImpl implements ProfesorService {
 	public ProfesorResponseDto update(ProfesorRequestDto profesorRequestDto) {
 		Optional<Profesor> opProfesor = profesorDao.findById(profesorRequestDto.getId());
 		if(!opProfesor.isPresent()) {
-			//TODO exception
+			throw new ResourceNotFoundException("Profesor", "id", profesorRequestDto.getId());
 		}
 		Profesor profesor = opProfesor.get();
 		profesor.setIme(profesorRequestDto.getIme());
@@ -52,7 +55,7 @@ public class ProfesorServiceImpl implements ProfesorService {
 	public ProfesorResponseDto findById(Long id) {
 		Optional<Profesor> opProfesor = profesorDao.findById(id);
 		if(!opProfesor.isPresent()) {
-			//TODO Exception
+			throw new ResourceNotFoundException("Profesor", "id", id);
 		}
 		Profesor profesor = opProfesor.get();
 		ProfesorResponseDto response = new ProfesorResponseDto(profesor);
@@ -60,11 +63,9 @@ public class ProfesorServiceImpl implements ProfesorService {
 	}
 
 	@Override
-	public List<ProfesorResponseDto> findAll(Predicate predicate) {
-		List<Profesor> profesors = profesorDao.findAll(predicate);
-		List<ProfesorResponseDto> response = new ArrayList<ProfesorResponseDto>();
-		profesors.forEach(profesor -> response.add(new ProfesorResponseDto(profesor)));
-		return response;
+	public Page<ProfesorResponseDto> findAll(Predicate predicate, Pageable pageable) {
+		Page<Profesor> profesors = profesorDao.findAll(predicate, pageable);
+		return new PageImpl<>(profesors.stream().map(ProfesorResponseDto::new).collect(Collectors.toList()), pageable, profesors.getTotalElements());
 	}
 
 	@Override

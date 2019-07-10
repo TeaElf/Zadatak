@@ -1,7 +1,5 @@
 package zadatak.domain.dto;
 
-import java.util.List;
-
 public class ProfesorRequestDto {
 
 	private Long id;

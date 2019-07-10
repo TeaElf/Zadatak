@@ -1,6 +1,7 @@
 package zadatak.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.querydsl.core.types.Predicate;
 
@@ -15,7 +16,7 @@ public interface PredmetService {
 	
 	PredmetResponseDto findById(Long id);
 	
-	List<PredmetResponseDto> findAll(Predicate predicate);
+	Page<PredmetResponseDto> findAll(Predicate predicate, Pageable pageable);
 	
 	Boolean delete(Long id);
 }

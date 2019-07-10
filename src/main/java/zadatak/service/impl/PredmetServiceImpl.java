@@ -1,18 +1,23 @@
 package zadatak.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 
 import zadatak.dao.PredmetDao;
+import zadatak.dao.ProfesorDao;
 import zadatak.domain.Predmet;
+import zadatak.domain.Profesor;
 import zadatak.domain.dto.PredmetRequestDto;
 import zadatak.domain.dto.PredmetResponseDto;
+import zadatak.exceptions.ResourceNotFoundException;
 import zadatak.service.PredmetService;
 
 @Service
@@ -20,9 +25,12 @@ public class PredmetServiceImpl implements PredmetService {
 	
 	private PredmetDao predmetDao;
 	
+	private ProfesorDao profesorDao;
+	
 	@Autowired
-	public PredmetServiceImpl(PredmetDao predmetDao) {
+	public PredmetServiceImpl(PredmetDao predmetDao, ProfesorDao profesorDao) {
 		this.predmetDao = predmetDao;
+		this.profesorDao = profesorDao;
 	}
 
 	@Override
@@ -30,6 +38,14 @@ public class PredmetServiceImpl implements PredmetService {
 		Predmet predmet = new Predmet();
 		predmet.setId(predmetRequestDto.getId());
 		predmet.setNaziv(predmetRequestDto.getNaziv());
+		if(predmetRequestDto.getProfesorId()!=null) {
+			
+			if (!profesorDao.existsById(predmetRequestDto.getProfesorId()))
+				throw new ResourceNotFoundException("Profesor","id", predmetRequestDto.getProfesorId());
+			
+			Profesor profesor = profesorDao.getOne(predmetRequestDto.getProfesorId());
+			predmet.setProfesor(profesor);
+		}
 		predmetDao.save(predmet);
 		PredmetResponseDto response = new PredmetResponseDto(predmet);
 		return response;
@@ -38,7 +54,7 @@ public class PredmetServiceImpl implements PredmetService {
 	@Override
 	public PredmetResponseDto update(PredmetRequestDto predmetRequestDto) {
 		if(!predmetDao.existsById(predmetRequestDto.getId())) {
-			//TODO exception
+			throw new ResourceNotFoundException("Predmet", "id", predmetRequestDto.getId());
 		}
 		Predmet predmet = predmetDao.getOne(predmetRequestDto.getId());
 		predmet.setNaziv(predmetRequestDto.getNaziv());
@@ -53,7 +69,7 @@ public class PredmetServiceImpl implements PredmetService {
 		Optional<Predmet> optPredmet = predmetDao.findById(id);
 		Predmet predmet = null;
 		if(!optPredmet.isPresent()) {
-			//TODO Exception
+			throw new ResourceNotFoundException("Predmet", "id", id);
 		}
 		predmet = optPredmet.get();
 		PredmetResponseDto response = new PredmetResponseDto(predmet);
@@ -61,14 +77,9 @@ public class PredmetServiceImpl implements PredmetService {
 	}
 
 	@Override
-	public List<PredmetResponseDto> findAll(Predicate predicate) {
-		List<Predmet> predmeti = predmetDao.findAll();
-		List<PredmetResponseDto> responses = new ArrayList<PredmetResponseDto>();
-		for(Predmet predmet: predmeti) {
-			PredmetResponseDto response = new PredmetResponseDto(predmet);
-			responses.add(response);
-		}
-		return responses;
+	public Page<PredmetResponseDto> findAll(Predicate predicate, Pageable pageable) {
+		Page<Predmet> predmeti = predmetDao.findAll(predicate, pageable);
+		return new PageImpl<>(predmeti.stream().map(PredmetResponseDto::new).collect(Collectors.toList()), pageable, predmeti.getTotalElements());
 	}
 
 	@Override
